@@ -51,6 +51,7 @@ import Tables from "layouts/tables";
 import UserProfile from "layouts/user-profile";
 import Billing from "layouts/billing";
 import ProjectTableData from "layouts/createUser/projectsTableData";
+import Product from "layouts/product/product";
 
 
 
@@ -261,6 +262,7 @@ export default function App() {
               <Route path="Tables" element={<Navigate to="/layouts/tables"/>}/>
               <Route path="billing" element={<Navigate to="/layouts/billing"/>}/>
               <Route path="createUser" element={<Navigate to="/layouts/createUser"/>}/>
+              <Route path="product" element={<Navigate to="/layouts/product"/>}/>
             
               {getRoutes(routes)}
               <Route path="*" element={<Navigate to="/dashboard" />} />
@@ -296,6 +298,7 @@ export default function App() {
             <Route path="/layouts/tables" element={<Tables/>}/>
             <Route path="/layouts/billing" element={<Billing/>}/>
             <Route path="/layouts/createUser" element={<ProjectTableData/>}/>
+            <Route path="/layouts/product" element={<Product/>}/>
            
             <Route
               exact

@@ -52,6 +52,8 @@ import Login from "auth/login";
 import Register from "auth/register";
 import ForgotPassword from "auth/forgot-password";
 import ResetPassword from "auth/reset-password";
+import Product from "layouts/product/product";
+import { MdProductionQuantityLimits } from "react-icons/md";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -138,6 +140,14 @@ const routes = [
   //   route: "/authentication/sign-up",
   //   component: <SignUp />,
   // },
+  {
+    type: "collapse",
+    name: "Product",
+    key: "Product",
+    icon: <MdProductionQuantityLimits />,
+    route: "/layouts/product",
+    component: <product/>,
+  },
   {
     type: "auth",
     name: "Login",

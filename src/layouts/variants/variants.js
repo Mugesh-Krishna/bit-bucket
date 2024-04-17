@@ -19,10 +19,10 @@ import {
 } from "@mui/material";
 
 import MDButton from "components/MDButton";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Accordion } from "@material-ui/core/Accordion";
+import { AccordionSummary } from "@material-ui/core/AccordionSummary";
+import { AccordionDetails } from "@material-ui/core/AccordionDetails";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 function Variants({ price }) {
   const [variants, setVariants] = useState([]);

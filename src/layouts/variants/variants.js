@@ -306,33 +306,33 @@ function Variants({ price }) {
   data.additionalValues.map((additionalData, additionalIndex) => (
     <React.Fragment key={`${dataIndex}-${additionalIndex}`}>
       {additionalData.newField.map((field, fieldIndex) => (
-      <TableRow key={`${dataIndex}-${additionalIndex}-${fieldIndex}`}>
-      <TableCell colSpan={2}>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1-content"
-            id="panel1-header"
-          >
-            <Typography>{field}</Typography>
-            <Typography variant="body2" color="textSecondary">
-              {price} 
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <div>
-              <Typography>Extra Data:</Typography>
-              <ul>
-                {additionalData.extraData && additionalData.extraData.map((extra, extraIndex) => (
-                  <li key={`extra-${extraIndex}`}>{extra}</li>
-                ))}
-              </ul>
-            </div>
-          </AccordionDetails>
-        </Accordion>
-      </TableCell>
-    </TableRow>
-    
+        <TableRow key={`${dataIndex}-${additionalIndex}-${fieldIndex}`}>
+          <TableCell colSpan={2}>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls={`panel-${dataIndex}-${additionalIndex}-${fieldIndex}-content`}
+                id={`panel-${dataIndex}-${additionalIndex}-${fieldIndex}-header`}
+              >
+                <Typography>{field}</Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {price} {/* Display the price */}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <div>
+                  <Typography>Extra Data:</Typography>
+                  <ul>
+                  {additionalData.extraData && additionalData.extraData.map((extra, extraIndex) => (
+  <li key={`extra-${extraIndex}`}>{extra.value}</li>
+))}
+
+                  </ul>
+                </div>
+              </AccordionDetails>
+            </Accordion>
+          </TableCell>
+        </TableRow>
       ))}
     </React.Fragment>
   ))}

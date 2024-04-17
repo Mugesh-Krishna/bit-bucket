@@ -268,15 +268,15 @@ function Variants({ price }) {
     <React.Fragment key={dataIndex}>
       <TableRow>
         <TableCell>{data.variant}</TableCell>
-        <TableCell>{price}</TableCell> {/* Display the price */}
+        <TableCell>{price}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell colSpan={2}>
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
-              aria-controls={`panel-${dataIndex}-variant-content`}
-              id={`panel-${dataIndex}-variant-header`}
+              aria-controls="panel1-content"
+              id="panel1-header"
             >
               <Typography>{data.variant}</Typography>
               <Typography variant="body2" color="textSecondary">
@@ -311,12 +311,12 @@ function Variants({ price }) {
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
-            aria-controls={`panel-${dataIndex}-${additionalIndex}-${fieldIndex}-content`}
-            id={`panel-${dataIndex}-${additionalIndex}-${fieldIndex}-header`}
+            aria-controls="panel1-content"
+            id="panel1-header"
           >
             <Typography>{field}</Typography>
             <Typography variant="body2" color="textSecondary">
-              {price} {/* Display the price */}
+              {price} 
             </Typography>
           </AccordionSummary>
           <AccordionDetails>

@@ -16,16 +16,16 @@ import {
   TableHead,
   TableRow,
   Collapse,
+  Input
 
 } from "@mui/material";
 
 import MDButton from "components/MDButton";
-import {Accordion} from "@mui/material";
-import {AccordionDetails} from "@mui/material";
-import {AccordionSummary} from "@mui/material";
+import './variants.css';
 import { useEffect } from "react";
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { from } from "stylis";
 function Variants({ price }) {
   const [variants, setVariants] = useState([]);
   const [fields, setFields] = useState([""]);
@@ -37,6 +37,53 @@ function Variants({ price }) {
   const [extraDataInputValues, setExtraDataInputValues] = useState([""]);
   const [showAddExtraDataLink, setShowAddExtraDataLink] = useState(false);
   const[finalData,setFinaldata]=useState([""]);
+
+  const [expanded, setExpanded] = useState(false);
+  const [cost, setCost] = useState(0); 
+  const [newCost, setNewCost] = useState(cost);
+  const [isEditing, setIsEditing] = useState(false);
+ const [newCosts, setNewCosts] = useState(tableData.map(() => 0));
+
+  const toggleAccordion = () => {
+    setExpanded(!expanded);
+  };
+  
+  const handleDeleteRow = (combinedIndex) => {
+    const [dataIndex, additionalIndex, fieldIndex] = combinedIndex.split("-");
+    
+    // Create a copy of tableData
+    const newData = [...tableData];
+  
+  
+    newData[dataIndex].additionalValues[additionalIndex].newField.splice(fieldIndex, 1);
+  
+   
+    setTableData(newData);
+  };
+  
+  
+  
+  
+  
+  
+  
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleCostChange = (e, rowIndex) => {
+    const { value } = e.target;
+    const updatedCosts = [...newCosts];
+    updatedCosts[rowIndex] = value;
+    setNewCosts(updatedCosts);
+  };
+
+  const handleSubmit = (rowIndex) => {
+    const newData = [...tableData];
+    newData[rowIndex].price = parseFloat(newCosts[rowIndex]); 
+    setTableData(newData);
+    setIsEditing(false); 
+  };
   
 
   const handleDoneData = () => {
@@ -44,11 +91,11 @@ function Variants({ price }) {
     setTableData(newData);
     console.log(extraDataInputValues);
 
-    // Filter out empty strings from extraDataInputValues before adding to finalData
+    
     const filteredExtraData = extraDataInputValues.filter(value => value.trim() !== "");
     setFinaldata(prevFinalData => [...prevFinalData, ...filteredExtraData]);
     
-    // Reset extraDataInputValues
+  
     setExtraDataInputValues([""]);
     setShowAddExtraDataInput(false);
 };
@@ -103,7 +150,7 @@ function Variants({ price }) {
     setVariants(prevVariants => {
       const updatedVariants = [...prevVariants];
       updatedVariants[index] = { medium: value };
-      console.log(updatedVariants[index].medium); // Logging the medium value
+      console.log(updatedVariants[index].medium); 
       return updatedVariants;
     });
   };
@@ -121,13 +168,13 @@ function Variants({ price }) {
     });
     setTableData(newData);
   
-    // Reset variants and fields for next entry
+    
     const updatedVariants = [...variants];
     updatedVariants[index] = { size: "", medium: "" };
     setVariants(updatedVariants);
     setFields([""]);
   
-    setShowAddExtraDataLink(true); // Show the "Add Extra Data" link
+    setShowAddExtraDataLink(true);
   };
   
 
@@ -175,15 +222,7 @@ function Variants({ price }) {
                     </Select>
                   </Grid>
                   <Grid item xs={4}>
-  {/* <TextField
-    label="Variant"
-    variant="outlined"
-    margin="normal"
-    fullWidth
-    value={variant.medium}
-    onChange={(e) => handleVariantMediumChange(e, index)}
-    style={{ height: "100%" }}
-  /> */}
+  
 </Grid>
 {fields.map((value, fieldIndex) => (
   <Grid item xs={3} key={fieldIndex}>
@@ -279,96 +318,70 @@ function Variants({ price }) {
                 {tableData.map((data, dataIndex) => (
     <React.Fragment key={dataIndex}>
       <TableRow>
-        {/* <TableCell>{data.variant}</TableCell>  */}
-        {/* <TableCell>{price}</TableCell>  */}
+       
       </TableRow>
       <TableRow>
         <TableCell colSpan={2}>
-        {/* <Accordion>
-        <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1-content"
-        id="panel1-header"
-      >
-       {variants.map((variant, index) => (
-        <div key={index}>
-      
-      <Typography> {variant.medium}</Typography>
-        </div>
-      ))}
-        <Typography variant="body2" color="textSecondary" style={{ marginLeft: "300px" }}>
-          {price} 
-        </Typography>
-      </AccordionSummary>
-
-  <AccordionDetails>
-    <Table>
-      <TableBody>
-      {finalData && finalData.map((finalValue, index) => (
-  <React.Fragment key={`final-data-${index}`}>
-    <TableRow>
-      <TableCell colSpan={2}>
-        {finalValue}
-      </TableCell>
-      {finalData.length > 0 && (
-        <Typography variant="body2" color="textSecondary" marginLeft="250px">
-          {price} 
-        </Typography>
-      )}
-    </TableRow>
-  </React.Fragment>
-))}
-
-      </TableBody>
-    </Table>
-  </AccordionDetails>
-</Accordion> */}
-
         </TableCell>
       </TableRow>
       {data.additionalValues &&
   data.additionalValues.map((additionalData, additionalIndex) => (
     <React.Fragment key={`${dataIndex}-${additionalIndex}`}>
-      {additionalData.newField.map((field, fieldIndex) => (
-        <TableRow key={`${dataIndex}-${additionalIndex}-${fieldIndex}`}>
-          <TableCell colSpan={2}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel2-content"
-                id="panel2-header"
-              >
-                <Typography>{field}</Typography>
-                <Typography variant="body2" color="textSecondary" marginLeft="250px">
-                  {price} 
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-  <div>
-   
-    <ul>
-      <TableBody>
-      {finalData && finalData.map((finalValue, index) => (
-  <React.Fragment key={`final-data-${index}`}>
-    <TableRow>
-      <TableCell colSpan={2}>
-        {finalValue}
-      </TableCell>
-      {finalValue && <TableCell>{price}</TableCell>}
-    </TableRow>
-  </React.Fragment>
+ {additionalData.newField.map((field, fieldIndex) => (
+  <TableRow key={`${dataIndex}-${additionalIndex}-${fieldIndex}`}>
+    <TableCell colSpan={2}>
+      <div className={`custom-accordion ${expanded ? 'expanded' : ''}`}>
+        <div className="accordion-summary">
+          <Typography>{field}</Typography>
+          <Typography variant="body2" color="textSecondary" style={{ marginLeft: "250px" }}>
+          {isEditing ? (
+          <Input
+            type="number"
+            value={newCosts[dataIndex]} 
+            onChange={(e) => handleCostChange(e, dataIndex)} 
+            style={{ width: '100px' }}
+          />
+        ) : (
+          `${data.price}` 
+        )}
+          </Typography>
+          {isEditing ? (
+        <MDButton onClick={() => handleSubmit(dataIndex)}>Save</MDButton> 
+      ) : (
+        <div>
+          <MDButton onClick={handleEditClick}>Edit</MDButton>
+          <MDButton onClick={() => handleDeleteRow(`${dataIndex}-${additionalIndex}-${fieldIndex}`)}>Delete</MDButton>
+
+ 
+        </div>
+      )}
+          <ExpandMoreIcon className="expand-icon" onClick={toggleAccordion} />
+        </div>
+        <div className="accordion-details">
+          <div>
+            <ul>
+              <TableBody>
+                {finalData && finalData.map((finalValue, index) => (
+                  <React.Fragment key={`final-data-${index}`}>
+                    <TableRow>
+                      <TableCell colSpan={2}>
+                        {finalValue}
+                      </TableCell>
+                      {finalValue && <TableCell>{data.price}</TableCell>}
+                    </TableRow>
+                  </React.Fragment>
+                ))}
+              </TableBody>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </TableCell>
+  </TableRow>
 ))}
 
-      </TableBody>
-    </ul>
-  </div>
-</AccordionDetails>
 
 
-            </Accordion>
-          </TableCell>
-        </TableRow>
-      ))}
     </React.Fragment>
   ))}
 

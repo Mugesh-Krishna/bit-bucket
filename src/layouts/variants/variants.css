@@ -1,0 +1,97 @@
+.custom-accordion {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .accordion-summary {
+    padding: 10px;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .accordion-details {
+    padding: 10px;
+  }
+  
+  .accordion-details ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .accordion-details ul li {
+    margin-bottom: 5px;
+  }
+  
+  /* Example of styling table */
+  .accordion-details table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .accordion-details th, .accordion-details td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .accordion-details th {
+    background-color: #f2f2f2;
+  }
+  .custom-accordion {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .accordion-summary {
+    padding: 10px;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer; /* Add cursor pointer to indicate expand/collapse */
+  }
+  
+  .accordion-details {
+    padding: 10px;
+    display: none; /* Initially hide the details */
+  }
+  
+  .custom-accordion.active .accordion-details {
+    display: block; /* Show the details when accordion is active */
+  }
+  .custom-accordion {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .accordion-summary {
+    padding: 10px;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer; /* Add cursor pointer to indicate expand/collapse */
+  }
+  
+  .expand-icon {
+    transition: transform 0.3s; /* Add transition for smooth icon rotation */
+  }
+  
+  .expanded .expand-icon {
+    transform: rotate(180deg); /* Rotate icon when accordion is expanded */
+  }
+  
+  .accordion-details {
+    padding: 10px;
+    display: none; /* Initially hide the details */
+  }
+  
+  .expanded .accordion-details {
+    display: block; /* Show the details when accordion is expanded */
+  }
+    

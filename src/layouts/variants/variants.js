@@ -23,6 +23,7 @@ import MDButton from "components/MDButton";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import { useEffect } from "react";
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 function Variants({ price }) {
@@ -35,22 +36,26 @@ function Variants({ price }) {
   const [showAddExtraDataInput, setShowAddExtraDataInput] = useState(false);
   const [extraDataInputValues, setExtraDataInputValues] = useState([""]);
   const [showAddExtraDataLink, setShowAddExtraDataLink] = useState(false);
+  const[finalData,setFinaldata]=useState([""]);
+  
 
   const handleDoneData = () => {
     const newData = [...tableData];
-
-    const additionalValues = {
-      variant: variants[variants.length - 1].medium,
-      newField: fields.filter((field) => field.trim() !== ""),
-      extraData: extraDataInputValues.filter((extra) => extra.trim() !== ""),
-    };
-
-    newData[newData.length - 1].additionalValues.push(additionalValues);
-
     setTableData(newData);
+    console.log(extraDataInputValues);
+
+    // Filter out empty strings from extraDataInputValues before adding to finalData
+    const filteredExtraData = extraDataInputValues.filter(value => value.trim() !== "");
+    setFinaldata(prevFinalData => [...prevFinalData, ...filteredExtraData]);
+    
+    // Reset extraDataInputValues
     setExtraDataInputValues([""]);
     setShowAddExtraDataInput(false);
-  };
+};
+
+  useEffect(() => {
+    console.log(finalData);
+  }, [finalData]);
 
   const handleAddExtraData = (e) => {
     e.preventDefault();
@@ -94,9 +99,13 @@ function Variants({ price }) {
     setFields(updatedFields);
   };
   const handleVariantMediumChange = (e, index) => {
-    const updatedVariants = [...variants];
-    updatedVariants[index].medium = e.target.value;
-    setVariants(updatedVariants);
+    const { value } = e.target;
+    setVariants(prevVariants => {
+      const updatedVariants = [...prevVariants];
+      updatedVariants[index] = { medium: value };
+      console.log(updatedVariants[index].medium); // Logging the medium value
+      return updatedVariants;
+    });
   };
   const handleDone = (index) => {
     const newData = [...tableData];
@@ -111,12 +120,16 @@ function Variants({ price }) {
       ],
     });
     setTableData(newData);
+  
+    // Reset variants and fields for next entry
     const updatedVariants = [...variants];
     updatedVariants[index] = { size: "", medium: "" };
     setVariants(updatedVariants);
     setFields([""]);
+  
     setShowAddExtraDataLink(true); // Show the "Add Extra Data" link
   };
+  
 
   const handleSelectChange = (e, index) => {
     const selectedValue = e.target.value;
@@ -162,39 +175,37 @@ function Variants({ price }) {
                     </Select>
                   </Grid>
                   <Grid item xs={4}>
-                    <TextField
-                      label="Variant"
-                      variant="outlined"
-                      margin="normal"
-                      fullWidth
-                      value={variant.medium}
-                      onChange={(e) => handleVariantMediumChange(e, index)}
-                      style={{ height: "100%" }}
-                    />
-                  </Grid>
-                  {variant.medium !== "" &&
-                    fields.map((value, fieldIndex) => (
-                      <Grid item xs={3} key={fieldIndex}>
-                        {fieldIndex < numFields && (
-                          <TextField
-                            label="New Field"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            value={value}
-                            onChange={(e) =>
-                              handleNewFieldChange(e, fieldIndex)
-                            }
-                            onBlur={() => {
-                              if (value.trim() === "") {
-                                handleDeleteField(fieldIndex);
-                              }
-                            }}
-                            style={{ marginBottom: "10px" }}
-                          />
-                        )}
-                      </Grid>
-                    ))}
+  {/* <TextField
+    label="Variant"
+    variant="outlined"
+    margin="normal"
+    fullWidth
+    value={variant.medium}
+    onChange={(e) => handleVariantMediumChange(e, index)}
+    style={{ height: "100%" }}
+  /> */}
+</Grid>
+{fields.map((value, fieldIndex) => (
+  <Grid item xs={3} key={fieldIndex}>
+    {fieldIndex < numFields && (
+      <TextField
+        label="New Field"
+        variant="outlined"
+        margin="normal"
+        fullWidth
+        value={value}
+        onChange={(e) => handleNewFieldChange(e, fieldIndex)}
+        onBlur={() => {
+          if (value.trim() === "") {
+            handleDeleteField(fieldIndex);
+          }
+        }}
+        style={{ marginBottom: "10px" }}
+      />
+    )}
+  </Grid>
+))}
+
                 </Grid>
                 <Grid item xs={12}>
                   <IconButton onClick={() => handleDone(index)}>
@@ -265,42 +276,54 @@ function Variants({ price }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-  {tableData.map((data, dataIndex) => (
+                {tableData.map((data, dataIndex) => (
     <React.Fragment key={dataIndex}>
       <TableRow>
-        <TableCell>{data.variant}</TableCell>
-        <TableCell>{price}</TableCell>
+        {/* <TableCell>{data.variant}</TableCell>  */}
+        {/* <TableCell>{price}</TableCell>  */}
       </TableRow>
       <TableRow>
         <TableCell colSpan={2}>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1-content"
-              id="panel1-header"
-            >
-              <Typography>{data.variant}</Typography>
-              <Typography variant="body2" color="textSecondary">
-                {data.variant}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Table>
-                <TableBody>
-                  {data.extraData &&
-                    data.extraData.map((extra, extraIndex) => (
-                      <TableRow
-                        key={`variant-${dataIndex}-extra-${extraIndex}`}
-                      >
-                        <TableCell colSpan={2}>
-                          {extra}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </AccordionDetails>
-          </Accordion>
+        {/* <Accordion>
+        <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1-content"
+        id="panel1-header"
+      >
+       {variants.map((variant, index) => (
+        <div key={index}>
+      
+      <Typography> {variant.medium}</Typography>
+        </div>
+      ))}
+        <Typography variant="body2" color="textSecondary" style={{ marginLeft: "300px" }}>
+          {price} 
+        </Typography>
+      </AccordionSummary>
+
+  <AccordionDetails>
+    <Table>
+      <TableBody>
+      {finalData && finalData.map((finalValue, index) => (
+  <React.Fragment key={`final-data-${index}`}>
+    <TableRow>
+      <TableCell colSpan={2}>
+        {finalValue}
+      </TableCell>
+      {finalData.length > 0 && (
+        <Typography variant="body2" color="textSecondary" marginLeft="250px">
+          {price} 
+        </Typography>
+      )}
+    </TableRow>
+  </React.Fragment>
+))}
+
+      </TableBody>
+    </Table>
+  </AccordionDetails>
+</Accordion> */}
+
         </TableCell>
       </TableRow>
       {data.additionalValues &&
@@ -316,21 +339,32 @@ function Variants({ price }) {
                 id="panel2-header"
               >
                 <Typography>{field}</Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {price} {/* Display the price */}
+                <Typography variant="body2" color="textSecondary" marginLeft="250px">
+                  {price} 
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <div>
-                  <Typography>Extra Data:</Typography>
-                  <ul>
-                  {additionalData.extraData && additionalData.extraData.map((extra, extraIndex) => (
-  <li key={`extra-${extraIndex}`}>{extra.value}</li>
+  <div>
+   
+    <ul>
+      <TableBody>
+      {finalData && finalData.map((finalValue, index) => (
+  <React.Fragment key={`final-data-${index}`}>
+    <TableRow>
+      <TableCell colSpan={2}>
+        {finalValue}
+      </TableCell>
+      {finalValue && <TableCell>{price}</TableCell>}
+    </TableRow>
+  </React.Fragment>
 ))}
 
-                  </ul>
-                </div>
-              </AccordionDetails>
+      </TableBody>
+    </ul>
+  </div>
+</AccordionDetails>
+
+
             </Accordion>
           </TableCell>
         </TableRow>
